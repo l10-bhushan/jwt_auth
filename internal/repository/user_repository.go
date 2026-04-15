@@ -27,11 +27,11 @@ func NewInMemoryUserRepo() *InMemoryUserRepo {
 }
 
 // Login method implementation
-func (repo *InMemoryUserRepo) Login(ctx context.Context, username string, password string) (dto.UserCreationSuccess, error) {
-	return dto.UserCreationSuccess{}, nil
+func (repo *InMemoryUserRepo) Login(ctx context.Context, username string, password string) error {
+	return nil
 }
 
 // Signup method implementation
-func (repo *InMemoryUserRepo) SignUp(ctx context.Context, email string, username string, password string) (dto.UserCreationSuccess, error) {
-	return dto.UserCreationSuccess{}, nil
+func (repo *InMemoryUserRepo) SignUp(ctx context.Context, email string, username string, password string) error {
+	return nil
 }
