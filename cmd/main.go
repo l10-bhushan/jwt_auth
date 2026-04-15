@@ -7,12 +7,14 @@ import (
 )
 
 func main() {
-	log.Println("Jwt auth example")
+	log.Println("Server running on PORT :8080")
 	cfg := router.Config{
 		Addr: ":8080",
 	}
 	app := router.Application{
 		Cfg: &cfg,
 	}
+
 	app.Run(app.Mount())
+
 }
