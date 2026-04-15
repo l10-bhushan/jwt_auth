@@ -11,3 +11,9 @@ type UserCreationSuccess struct {
 	Status Status
 	Data   any
 }
+
+type UserSignUpRequest struct {
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
