@@ -42,7 +42,7 @@ func (s *JWTService) GenerateToken(userId string) (string, error) {
 	}
 
 	// This will return us a token that is signed using ES256 method
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Here, we are signing the string with the secret key
 	return token.SignedString(s.secretKey)
 }

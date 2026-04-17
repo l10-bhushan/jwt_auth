@@ -10,7 +10,9 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/l10-bhushan/jwt_auth/internal/auth"
 	"github.com/l10-bhushan/jwt_auth/internal/handler"
+	"github.com/l10-bhushan/jwt_auth/internal/middleware"
 	"github.com/l10-bhushan/jwt_auth/internal/repository"
 	"github.com/l10-bhushan/jwt_auth/internal/service"
 )
@@ -30,13 +32,16 @@ func NewAppliction(cfg *Config) *Application {
 }
 
 func (app *Application) Mount() http.Handler {
+	jwt_secret := os.Getenv("JWT_SECRET")
+	app_name := os.Getenv("APP_NAME")
 	router := chi.NewRouter()
-
+	jwtService := auth.NewJwtService(jwt_secret, app_name)
 	repo := repository.NewInMemoryUserRepo()
 	service := service.NewUserService(repo)
-	handler := handler.NewUserHandler(service)
+	handler := handler.NewUserHandler(service, jwtService)
 	router.Get("/health", handler.Health)
-
+	router.Post("/signup", handler.SignUp)
+	router.Get("/protected", http.HandlerFunc(middleware.JWTMiddleWare(http.HandlerFunc(handler.ProtectedHandler)).ServeHTTP))
 	return router
 }
 

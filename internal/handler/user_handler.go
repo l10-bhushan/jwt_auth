@@ -3,11 +3,13 @@ package handler
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/l10-bhushan/jwt_auth/internal/auth"
 	"github.com/l10-bhushan/jwt_auth/internal/dto"
+	"github.com/l10-bhushan/jwt_auth/internal/middleware"
 	"github.com/l10-bhushan/jwt_auth/internal/service"
 	"github.com/l10-bhushan/jwt_auth/lib/utils"
 )
@@ -49,12 +51,26 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	err = userHandler.UserService.SignUp(r.Context(), id, signUpRequest.Email, signUpRequest.Username, signUpRequest.Password)
 	if err != nil {
 		utils.ErrorHandler(w, err, http.StatusBadRequest)
+		return
 	}
 	token, err := userHandler.JwtService.GenerateToken(id)
+	if err != nil {
+		log.Println(err)
+		utils.ErrorHandler(w, err, http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":       "success",
 		"access_token": token,
 	})
+}
+
+// Protected Handler
+
+func (handler *UserHandler) ProtectedHandler(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value(middleware.UserContextKey)
+
+	w.Write([]byte("Hello user: " + userId.(string)))
 }

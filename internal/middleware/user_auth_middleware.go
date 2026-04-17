@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -26,6 +27,7 @@ func JWTMiddleWare(next http.Handler) http.Handler {
 
 		claims, err := jwtService.ValidateToken(tokenStr)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
