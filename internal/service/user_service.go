@@ -22,6 +22,10 @@ func (service *UserService) Login(ctx context.Context, username, password string
 }
 
 // TODO: Implement Signup functionality
-func (service *UserService) SignUp(ctx context.Context, email, username, password string) error {
+func (service *UserService) SignUp(ctx context.Context, id, email, username, password string) error {
+	err := service.repo.SignUp(ctx, id, email, username, password)
+	if err != nil {
+		return err
+	}
 	return nil
 }

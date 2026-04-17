@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/l10-bhushan/jwt_auth/internal/dto"
 	"github.com/l10-bhushan/jwt_auth/internal/model"
@@ -32,6 +33,14 @@ func (repo *InMemoryUserRepo) Login(ctx context.Context, username string, passwo
 }
 
 // Signup method implementation
-func (repo *InMemoryUserRepo) SignUp(ctx context.Context, email string, username string, password string) error {
+func (repo *InMemoryUserRepo) SignUp(ctx context.Context, id string, email string, username string, password string) error {
+	repo.data[id] = model.User{
+		Id:        id,
+		Email:     email,
+		Username:  username,
+		Password:  password,
+		CreatedAt: time.Now(),
+	}
+
 	return nil
 }
